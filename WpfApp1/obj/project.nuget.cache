@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mgwtDGzmRQ3+wJWzi+IFtdUWHfJxzKD4Yh+kYIqcHv8uhRllYzexe8+58bfnCBGrwYxiquMApAcIZUkjFF/Qxw==",
+  "dgSpecHash": "82PF83gRsL7siOTXrjV7aQnJkMBY2lpa79PNIsvxvkB2SmOBm5cuoVU4p1SneWIVvHMRq4WAYLT6OmbZ+4/HbA==",
   "success": true,
-  "projectFilePath": "F:\\Projects\\Templator\\WpfApp1\\WpfApp1.csproj",
+  "projectFilePath": "F:\\Projects\\Templator\\WpfApp1\\Templator.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
