@@ -6,22 +6,32 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="640">
-    <Grid>
+    <Grid Height="752" VerticalAlignment="Bottom">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ColumnSpace" Width="508"/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto">
-            </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="CanvasSpace"
-                MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
-                MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                MouseMove="Canvas_MouseMove"/>
-        <Button Name="AddLogoButton" Grid.Row="0" Grid.Column="1" Content="Добавить логотип" Click="AddLogoButton_Click" Margin="219,0,0,700"/>
-        <Button Name="SetBackgroundButton" Grid.Row="1" Grid.Column="1" Content="Добавить фон" Click="SetBackgroundButton_Click"></Button>
+ <Canvas x:Name="CanvasSpace" MouseMove="CanvasSpace_OnMouseMove" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinWidth="468" MinHeight="768" />
+
+
+        <Grid Grid.Column="1" Grid.Row="0" Margin="0,0,0,26">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Name="SetBackgroundButton" Grid.Column="0" Content="Добавить фон" Margin="0, 30, 0, 5" Click="SetBackgroundButton_Click"/>
+            <Button Name="AddLogoButton" Grid.Row="1" Grid.Column="0" Content="Добавить логотип" Margin="0, 0, 0, 5"  Click="AddLogoButton_Click"/>
+        </Grid>
+       
+
+
+
     </Grid>
 </Window>

@@ -6,4 +6,19 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="obj - Копировать\**" />
+    <EmbeddedResource Remove="obj - Копировать\**" />
+    <None Remove="obj - Копировать\**" />
+    <Page Remove="obj - Копировать\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Application%27s sample.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Application's sample.png" />
+  </ItemGroup>
+
 </Project>
