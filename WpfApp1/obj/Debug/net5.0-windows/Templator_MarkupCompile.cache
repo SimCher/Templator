@@ -1,20 +1,20 @@
 ﻿Templator
-
+1.0.0.0
 
 winexe
 C#
 .cs
-D:\Projects\Templator\WpfApp1\obj\Debug\net5.0-windows\
+d:\Projects\Templator\WpfApp1\obj\Debug\net5.0-windows\
 Templator
 none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
-D:\Projects\Templator\WpfApp1\App.xaml
-11407045341
+d:\Projects\Templator\WpfApp1\App.xaml
+3-1628066712
 
-5441471265
+121337060117
 193-1891726104
-MainWindow.xaml;
+FontChooseWindow.xaml;MainWindow.xaml;TextDialog.xaml;
 
 True
 

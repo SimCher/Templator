@@ -1,24 +1,25 @@
-﻿<Window x:Class="WpfApp1.MainWindow"
+﻿<Window x:Class="Templator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:local="clr-namespace:Templator"
+        xmlns:tcol="clr-namespace:Templator.TextCollection"
         mc:Ignorable="d"
-        Title="MainWindow" Height="768" Width="640">
+        Title="Templator" Height="768" Width="840" WindowStartupLocation="CenterScreen">
     <Grid Height="752" VerticalAlignment="Bottom">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="ColumnSpace" Width="508"/>
-            <ColumnDefinition/>
+            <ColumnDefinition x:Name="ColumnSpace" Width="918"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
- <Canvas x:Name="CanvasSpace" MouseMove="CanvasSpace_OnMouseMove" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinWidth="468" MinHeight="768" />
 
 
-        <Grid Grid.Column="1" Grid.Row="0" Margin="0,0,0,26">
+        <Canvas x:Name="CanvasSpace" MouseMove="CanvasSpace_OnMouseMove" Margin="120,10,83,79" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <Grid Grid.Row="0" Margin="0,10,802,79" MinWidth="87" Height="736" Width="114">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -27,9 +28,37 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Name="SetBackgroundButton" Grid.Column="0" Content="Добавить фон" Margin="0, 30, 0, 5" Click="SetBackgroundButton_Click"/>
-            <Button Name="AddLogoButton" Grid.Row="1" Grid.Column="0" Content="Добавить логотип" Margin="0, 0, 0, 5"  Click="AddLogoButton_Click"/>
+            <Button Name="AddLogoButton" Grid.Row="1" Grid.Column="0" Content="Добавить логотип" Margin="0, 0, 0, 5"  Click="AddLogoButton_Click" IsEnabled="False"/>
+            <Button Name="AddTextButton" Grid.Row="2" Grid.Column="0" Content="Добавить текст" Click="AddTextButton_OnClick" IsEnabled="False" Height="20" VerticalAlignment="Top"/>
+            <TextBlock Name="Text" Grid.Row="3" Margin="0,0,0,5" IsEnabled="False"></TextBlock>
+
+            <ListBox Grid.Row="4" x:Name="TextElementListBox" ItemsSource="{Binding}"
+                     IsSynchronizedWithCurrentItem="True">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".25*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1"  FontSize="10" Margin="8,0,95,30" Height="Auto" VerticalAlignment="Stretch" Text="{Binding Name}"/>
+                            <Button Grid.Column="0" Content="Х" HorizontalAlignment="Right" Height="22.5" Margin="0,0,8,8" VerticalAlignment="Top" Click="ButtonBase_OnClick"></Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Button Grid.Row="5" Name="OpenGenerateSettingsButton" Content="Загрузить текст" Margin="0,0,0,5" Click="OpenGenerateSettingsButton_OnClick"/>
+
+            <Label Name="StateLabel" Grid.Row="6" Margin="0,0, 0, 5">
+                <Label.RenderTransform>
+                    <ScaleTransform
+                        ></ScaleTransform>
+                </Label.RenderTransform>
+
+            </Label>
         </Grid>
-       
+
 
 
 

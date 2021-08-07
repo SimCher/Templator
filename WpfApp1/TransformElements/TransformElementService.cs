@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Templator.TransformElements
@@ -65,6 +65,7 @@ namespace Templator.TransformElements
             private bool _isStretchLeft;
             private bool _isStretchRight;
             private IInputElement _inputElement;
+            private Type _inputElementChildType;
             private PointXYZ _position;
             #endregion
             #region Properties
@@ -80,7 +81,18 @@ namespace Templator.TransformElements
                     _inputElement = value;
                     _isDragging = false;
                     _isStretching = false;
+
+                    if (_inputElement is Border border)
+                    {
+                        InputElementChildType = border.Child.GetType();
+                    }
                 }
+            }
+
+            public Type InputElementChildType
+            {
+                get => _inputElementChildType;
+                set => _inputElementChildType = value;
             }
 
             /// <summary>
@@ -162,11 +174,12 @@ namespace Templator.TransformElements
 
             #endregion
         }
-        #endregion NestedClasses
+        #endregion
 
-        #region Fields
-
+        #region Properties
         private static TransformElement Element { get; }
+
+        public static StretchDirections StretchDirection { get; private set; }
 
         #endregion
 
@@ -174,6 +187,7 @@ namespace Templator.TransformElements
         static TransformElementService()
         {
             Element = new TransformElement();
+            StretchDirection = StretchDirections.None;
         }
 #endregion
 
@@ -210,7 +224,7 @@ namespace Templator.TransformElements
         /// <param name="mouseX">Х-координата мыши</param>
         /// <param name="mouseY">Y-координата мыши</param>
         /// <param name="cursor">Курсор (по нему определяется направление растяжения)</param>
-        public static void DragOrStretch(double mouseX, double mouseY, Cursor cursor = null)
+        public static void DragOrStretch(double mouseX, double mouseY)
         {
             BringToFront();
 
@@ -221,7 +235,7 @@ namespace Templator.TransformElements
 
             if (Element.IsStretching)
             {
-                StretchElement(mouseX, mouseY, cursor);
+                StretchElement(mouseX, mouseY);
             }
         }
 
@@ -231,9 +245,7 @@ namespace Templator.TransformElements
         /// <param name="element">Элемент для трансформации или скалирования</param>
         public static void SetNewElement(object element)
         {
-            int newZIndex = (int)((Border)element).GetValue(Panel.ZIndexProperty);
-            Element.ZIndex = newZIndex > Element.ZIndex ? newZIndex : Element.ZIndex;
-
+            SetNewZIndex(element);
             Element.InputElement = (IInputElement)element;
         }
 
@@ -247,7 +259,7 @@ namespace Templator.TransformElements
         /// <returns></returns>
         public static StretchDirections GetStretchDirection(double mouseX, double mouseY, object element)
         {
-            var stretchDirections = StretchDirections.None;
+            StretchDirection = StretchDirections.None;
             var border = (Border)element;
             double rightBorder = border.ActualWidth - border.Padding.Right;
             double bottomBorder = border.ActualHeight - border.Padding.Bottom;
@@ -255,15 +267,15 @@ namespace Templator.TransformElements
             if ((mouseX >= rightBorder && mouseX < border.ActualWidth) &&
                 (mouseY >= bottomBorder && mouseY < border.ActualHeight))
             {
-                stretchDirections = StretchDirections.Both;
+                StretchDirection = StretchDirections.Both;
             }
             else if (mouseX >= rightBorder && mouseX < border.ActualWidth)
             {
-                stretchDirections = StretchDirections.Right;
+                StretchDirection = StretchDirections.Right;
             }
             else if (mouseY >= bottomBorder && mouseY < border.ActualHeight)
             {
-                stretchDirections = StretchDirections.Bottom;
+                StretchDirection = StretchDirections.Bottom;
             }
 
             Element.InputElement = (IInputElement)element;
@@ -271,7 +283,7 @@ namespace Templator.TransformElements
             Element.Y = mouseY;
             Element.IsStretching = true;
 
-            return stretchDirections;
+            return StretchDirection;
         }
 
         /// <summary>
@@ -282,9 +294,14 @@ namespace Templator.TransformElements
             Element.IsDragging = false;
             Element.IsStretching = false;
         }
-        #endregion PublicMethods
+        #endregion
         #region PrivateMethods
 
+        private static void SetNewZIndex(object element)
+        {
+            int newZIndex = (int)((Border)element).GetValue(Panel.ZIndexProperty);
+            Element.ZIndex = newZIndex > Element.ZIndex ? newZIndex : Element.ZIndex;
+        }
         /// <summary>
         /// Устанавливает самый высокий Z-индекс и выводит элемент на первый план
         /// </summary>
@@ -299,7 +316,7 @@ namespace Templator.TransformElements
         /// <param name="mouseX">X-координата курсора мыши</param>
         /// <param name="mouseY">Y-координата курсора мыши</param>
         /// <param name="cursor">Курсор мыши (нужен для указания направления скалирования)</param>
-        private static void StretchElement(double mouseX, double mouseY, Cursor cursor)
+        private static void StretchElement(double mouseX, double mouseY)
         {
             Border border = (Border)Element.InputElement;
             var xDifferent = mouseX - Element.X;
@@ -308,24 +325,25 @@ namespace Templator.TransformElements
             xDifferent = (border.Width + xDifferent) > border.MinWidth ? xDifferent : border.MinWidth;
             yDifferent = (border.Height + yDifferent) > border.MinHeight ? yDifferent : border.MinHeight;
 
-            if (cursor == Cursors.SizeNWSE)
+            if (StretchDirection == StretchDirections.Both)
             {
                 ((Border)Element.InputElement).Width += xDifferent;
                 ((Border)Element.InputElement).Height += yDifferent;
             }
-            else if (cursor == Cursors.SizeWE)
+            else if (StretchDirection == StretchDirections.Right)
             {
                 ((Border)Element.InputElement).Width += xDifferent;
             }
-            else if (cursor == Cursors.SizeNS)
+            else if (StretchDirection == StretchDirections.Bottom)
             {
                 ((Border)Element.InputElement).Height += yDifferent;
             }
             else
             {
-                cursor = Cursors.Arrow;
+                StretchDirection = StretchDirections.None;
                 Element.IsStretching = false;
             }
+
 
             Element.X = mouseX;
             Element.Y = mouseY;
@@ -336,27 +354,23 @@ namespace Templator.TransformElements
         /// </summary>
         /// <param name="mouseX"></param>
         /// <param name="mouseY"></param>
-        private static void DragElement(double mouseX, double mouseY)
+        public static void DragElement(double mouseX, double mouseY)
         {
-            if (((UIElement)Element.InputElement).RenderTransform is not TransformGroup transformGroup)
+            if(((UIElement)Element.InputElement)?.RenderTransform is TransformGroup transformGroup)
             {
-                return;
+                var translateTransforms = transformGroup.Children
+                    .Where(t => t.GetType().Name == "TranslateTransform").Select(t => t);
+
+                foreach (var transform in translateTransforms)
+                {
+                    var translateTransform = (TranslateTransform)transform;
+                    translateTransform.X += mouseX - Element.X;
+                    translateTransform.Y += mouseY - Element.Y;
+                }
+
+                Element.X = mouseX;
+                Element.Y = mouseY;
             }
-
-            var translateTransforms = transformGroup.Children
-                .Where(t => t.GetType().Name == "TranslateTransform").Select(t => t);
-
-            foreach (var transform in translateTransforms)
-            {
-                var translateTransform = (TranslateTransform)transform;
-                translateTransform.X += mouseX - Element.X;
-                translateTransform.Y += mouseY - Element.Y;
-            }
-
-            Element.X = mouseX;
-            Element.Y = mouseY;
-
-
         }
 #endregion PrivateMethods
     }

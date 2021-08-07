@@ -1,0 +1,28 @@
+﻿<Window x:Class="Templator.TextDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Templator"
+        mc:Ignorable="d"
+        Title="Добавление текста" Height="198" Width="220" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    
+    <Grid Margin="0,0,0,32">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Дайте название тексту" Margin="0, 18, 0,3" TextAlignment="Center" Grid.Row="0"/>
+        <TextBox x:Name="ElementNameTextBox" Margin="0,3" Grid.Row="1" MaxLength="16"/>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Образец текста" TextAlignment="Center" Grid.Row="2" Margin="0, 3"></TextBlock>
+        <TextBox x:Name="SampleTextBox" Margin="0, 3" Grid.Row="3" MaxLength="50"></TextBox>
+        <Button x:Name="OkButton" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Content="ОК" Click="OkButton_OnClick" Width="58"/>
+
+    </Grid>
+
+</Window>

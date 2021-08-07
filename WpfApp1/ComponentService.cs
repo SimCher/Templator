@@ -5,18 +5,52 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
-namespace WpfApp1
+namespace Templator
 {
     /// <summary>
     /// Вспомогательный класс для работы с изображениями
     /// </summary>
-    static class ImageService
+    static class ComponentService
     {
+        public static Border GetInteractionTextBlock()
+        {
+            var textBox = new TextBlock
+            {
+                Text = "Loren Ipsum", 
+                TextAlignment = TextAlignment.Center,
+                Background = new SolidColorBrush(Colors.Transparent),
+
+            };
+            var border = GetBorderElement();
+            border.Child = textBox;
+
+            return border;
+        }
+
+        public static Border GetInteractionTextBlock(string initialText)
+        {
+            if (!string.IsNullOrWhiteSpace(initialText))
+            {
+                var textBox = new TextBlock
+                {
+                    Text = initialText,
+                    TextAlignment = TextAlignment.Center,
+                    Background = new SolidColorBrush(Colors.Transparent),
+
+                };
+                var border = GetBorderElement();
+                border.Child = textBox;
+
+                return border;
+            }
+
+            return GetInteractionTextBlock();
+        }
         /// <summary>
         /// Открывает диалоговое окно для выбора изображения и возвращает изображение, выбранное пользователем
         /// </summary>
         /// <returns>Изображение, выбранное в диалоговом окне</returns>
-        public static Border GetPictureWithOpenFileDialog()
+        public static Border GetInteractionPictureWithOpenFileDialog()
         {
             Image image = null;
             var dialog = ShowOpenFileDialog();
