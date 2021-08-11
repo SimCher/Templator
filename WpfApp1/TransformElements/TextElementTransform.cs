@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Templator.Annotations;
 
-namespace Templator.TextCollection
+namespace Templator.TransformElements
 {
-    public class TextElement : INotifyPropertyChanged
+    public class TextElementTransform : ElementTransform, INotifyPropertyChanged
     {
         private string _name;
-        private UIElement _textElement;
 
         public string Name
         {
@@ -28,28 +22,12 @@ namespace Templator.TextCollection
             }
         }
 
-        public UIElement TextControl
-        {
-            get => _textElement;
-            set
-            {
-                if (value != null)
-                {
-                    _textElement = value;
-                }
-            }
-        }
-
-        public TextElement()
-        {
-            
-        }
-
-        public TextElement(string name, UIElement textElement)
+        public TextElementTransform(string name, IInputElement element)
         {
             Name = name;
-            TextControl = textElement;
+            InputElement = element;
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -60,7 +38,7 @@ namespace Templator.TextCollection
 
         public override string ToString()
         {
-            return $"Name: {Name} => TextElement:{TextControl}";
+            return $"Name: {Name} => TextElement:{InputElement}";
         }
     }
 }

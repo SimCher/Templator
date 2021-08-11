@@ -1,11 +1,127 @@
 {
   "version": 3,
   "targets": {
-    "net5.0-windows7.0": {}
+    "net5.0-windows7.0": {
+      "Syncfusion.Compression.Base/19.2.0.51": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Syncfusion.Compression.Base.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Syncfusion.Compression.Base.dll": {}
+        }
+      },
+      "Syncfusion.Licensing/19.2.0.51": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Syncfusion.Licensing.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Syncfusion.Licensing.dll": {}
+        }
+      },
+      "Syncfusion.XlsIO.Wpf/19.2.0.51": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Compression.Base": "19.2.0.51",
+          "Syncfusion.Licensing": "19.2.0.51"
+        },
+        "compile": {
+          "lib/net5.0-windows/Syncfusion.XlsIO.Base.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0-windows/Syncfusion.XlsIO.Base.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Syncfusion.Compression.Base/19.2.0.51": {
+      "sha512": "mCFToXqwvXoXVADH0PT1pdYvbTHmgKJrO/wG0AxuKi7zqytEqwDeo4sKkidV3T4UjG0M/tOVAlBia+pqKRz4ug==",
+      "type": "package",
+      "path": "syncfusion.compression.base/19.2.0.51",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net20/Syncfusion.Compression.Base.dll",
+        "lib/net20/Syncfusion.Compression.Base.xml",
+        "lib/net35/Syncfusion.Compression.Base.dll",
+        "lib/net35/Syncfusion.Compression.Base.xml",
+        "lib/net40/Syncfusion.Compression.Base.dll",
+        "lib/net40/Syncfusion.Compression.Base.xml",
+        "lib/net45/Syncfusion.Compression.Base.dll",
+        "lib/net45/Syncfusion.Compression.Base.xml",
+        "lib/net451/Syncfusion.Compression.Base.dll",
+        "lib/net451/Syncfusion.Compression.Base.xml",
+        "lib/net46/Syncfusion.Compression.Base.dll",
+        "lib/net46/Syncfusion.Compression.Base.xml",
+        "lib/net5.0/Syncfusion.Compression.Base.dll",
+        "lib/net5.0/Syncfusion.Compression.Base.xml",
+        "lib/netcoreapp3.1/Syncfusion.Compression.Base.dll",
+        "lib/netcoreapp3.1/Syncfusion.Compression.Base.xml",
+        "syncfusion.compression.base.19.2.0.51.nupkg.sha512",
+        "syncfusion.compression.base.nuspec"
+      ]
+    },
+    "Syncfusion.Licensing/19.2.0.51": {
+      "sha512": "eLgJ3ZHUKCHVi3/rRQ7BTMlJEk/UknRIIv6FsjbYt2kEaADvf50AFd1UDKerGWxaCnDgjIjWKFSzF7DA+sk1Qw==",
+      "type": "package",
+      "path": "syncfusion.licensing/19.2.0.51",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/MonoAndroid10.0/Syncfusion.Licensing.dll",
+        "lib/MonoAndroid90/Syncfusion.Licensing.dll",
+        "lib/Xamarin.Mac/Syncfusion.Licensing.dll",
+        "lib/Xamarin.iOS10/Syncfusion.Licensing.dll",
+        "lib/net20/Syncfusion.Licensing.dll",
+        "lib/net35/Syncfusion.Licensing.dll",
+        "lib/net40/Syncfusion.Licensing.dll",
+        "lib/net45/Syncfusion.Licensing.dll",
+        "lib/net451/Syncfusion.Licensing.dll",
+        "lib/net46/Syncfusion.Licensing.dll",
+        "lib/net5.0/Syncfusion.Licensing.dll",
+        "lib/netcoreapp3.1/Syncfusion.Licensing.dll",
+        "lib/netstandard1.0/Syncfusion.Licensing.dll",
+        "lib/netstandard1.2/Syncfusion.Licensing.dll",
+        "lib/netstandard1.4/Syncfusion.Licensing.dll",
+        "lib/netstandard2.0/Syncfusion.Licensing.dll",
+        "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.Licensing.dll",
+        "lib/uap10.0/Syncfusion.Licensing.dll",
+        "syncfusion.licensing.19.2.0.51.nupkg.sha512",
+        "syncfusion.licensing.nuspec"
+      ]
+    },
+    "Syncfusion.XlsIO.Wpf/19.2.0.51": {
+      "sha512": "KdndEyd0ZATGmLDDuhDidlMyEsAfUfkZUPA5cMcJ9I9gjRlBMn9rKSByU9rXqBV2FSw2EkD36v3sFQzNuqHGnw==",
+      "type": "package",
+      "path": "syncfusion.xlsio.wpf/19.2.0.51",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/Syncfusion.XlsIO.Base.dll",
+        "lib/net35/Syncfusion.XlsIO.Base.xml",
+        "lib/net40/Syncfusion.XlsIO.Base.dll",
+        "lib/net40/Syncfusion.XlsIO.Base.xml",
+        "lib/net45/Syncfusion.XlsIO.Base.dll",
+        "lib/net45/Syncfusion.XlsIO.Base.xml",
+        "lib/net451/Syncfusion.XlsIO.Base.dll",
+        "lib/net451/Syncfusion.XlsIO.Base.xml",
+        "lib/net46/Syncfusion.XlsIO.Base.dll",
+        "lib/net46/Syncfusion.XlsIO.Base.xml",
+        "lib/net5.0-windows/Syncfusion.XlsIO.Base.dll",
+        "lib/net5.0-windows/Syncfusion.XlsIO.Base.xml",
+        "lib/netcoreapp3.1/Syncfusion.XlsIO.Base.dll",
+        "lib/netcoreapp3.1/Syncfusion.XlsIO.Base.xml",
+        "syncfusion.xlsio.wpf.19.2.0.51.nupkg.sha512",
+        "syncfusion.xlsio.wpf.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net5.0-windows7.0": []
+    "net5.0-windows7.0": [
+      "Syncfusion.XlsIO.Wpf >= 19.2.0.51"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Demetros\\.nuget\\packages\\": {}
@@ -45,6 +161,12 @@
     "frameworks": {
       "net5.0-windows7.0": {
         "targetAlias": "net5.0-windows",
+        "dependencies": {
+          "Syncfusion.XlsIO.Wpf": {
+            "target": "Package",
+            "version": "[19.2.0.51, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

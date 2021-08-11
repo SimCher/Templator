@@ -1,66 +1,89 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Templator.TextCollection;
-using WpfApp1;
-using Transformer = Templator.TransformElements.TransformElementService;
+using Templator.TransformElements;
 
 namespace Templator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private Border _logo;
-        private Border[] _generatedTexts;
-        private int _textsLimit;
+        private TemplateGenerator.TemplateGenerator Generator { get; set; }
+        private Canvas _mainWindowCanvas;
+        private IList<Border> _borderElements;
 
-        public ObservableCollection<TextElement> TextElements { get; set; }
+        /// <summary>
+        /// Коллекция трансформируемых текстовых элементов (нужны для автозаполнения)
+        /// </summary>
+        ObservableCollection<TextElementTransform> TextElements { get; }
 
         public MainWindow()
         {
             InitializeComponent();
-            TextElements = new ObservableCollection<TextElement>();
-            this.DataContext = TextElements;
+            TextElements = new ObservableCollection<TextElementTransform>();
+            DataContext = TextElements;
         }
-        
-        private void AddLogoButton_Click(object sender, RoutedEventArgs e)
+
+        public void Generate()
         {
-            if (_logo != null)
+            var thread = new Thread(new ParameterizedThreadStart(Generator.Generate));
+            _borderElements = new List<Border>();
+            if (_borderElements.Count == 0)
             {
-                if (CanvasSpace.Children.Contains(_logo))
-                {
-                    CanvasSpace.Children.Remove(_logo);
-                }
+                FillBordersList();
+            }
+            RemoveBorders();
+            Generator.Generate(CanvasSpace);
+            RestoreBorders();
+            MessageBox.Show("Готово!", "Генерация завершена", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void SetGenerator(TemplateGenerator.TemplateGenerator generator)
+        {
+            Generator = new TemplateGenerator.TemplateGenerator(generator);
+        }
+
+        /// <summary>
+        /// Если возможно, добавить текстовый элемент в коллекцию трансформируемых текст. элементов
+        /// </summary>
+        /// <param name="elementName"></param>
+        /// <param name="sampleText"></param>
+        public void TryAddToCollection(string elementName, string sampleText)
+        {
+            if (TextElements.Any(t => t.Name == elementName))
+            {
+                MessageBox.Show("Элемент с таким названием уже существует!", "Невозможно создать элемент",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return;
             }
 
-            _logo = ComponentService.GetInteractionPictureWithOpenFileDialog();
+            var textElement = ComponentService.GetInteractionTextBlock(elementName, sampleText);
 
-            _logo.MouseLeftButtonDown += Border_MouseLeftButtonDown;
-            _logo.MouseLeave += Border_MouseLeave;
-            _logo.MouseEnter += Border_MouseEnter;
+            textElement.InputElement.MouseLeftButtonDown += Border_MouseLeftButtonDown;
+            textElement.InputElement.MouseLeave += Border_MouseLeave;
+            textElement.InputElement.MouseEnter += Border_MouseEnter;
 
-            Canvas.SetLeft(_logo, 0);
-            Canvas.SetTop(_logo, 20);
-            CanvasSpace.Children.Add(_logo);
+            Canvas.SetLeft((UIElement)textElement.InputElement, 0);
+            Canvas.SetTop((UIElement)textElement.InputElement, 20);
+            CanvasSpace.Children.Add((UIElement)textElement.InputElement);
+
+            TextElements.Add(new TextElementTransform(elementName, textElement.InputElement));
+
+            OpenGenerateSettingsButton.IsEnabled = true;
+
+            MessageBox.Show(TextElements.Last() + " " + TextElements.Count);
         }
 
-       
-
-        private void SetBackgroundButton_Click(object sender, RoutedEventArgs e)
-        {
-            var background = ComponentService.GetBackgroundWithOpenFileDialog();
-
-            CanvasSpace.Background = background;
-            AddLogoButton.IsEnabled = true;
-            AddTextButton.IsEnabled = true;
-        }
-        
         /// <summary>
-        /// По нажатию мыши в области окна
+        /// По нажатию ЛКМ в области окна захватить элемент, если курсор входит область элемента
         /// </summary>
         /// <param name="e"></param>
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -69,20 +92,57 @@ namespace Templator
 
             var mousePosition = GetMousePosition(CanvasSpace);
 
-            Transformer.Grab(mousePosition.Item1, mousePosition.Item2);
+            ElementTransformService.Grab(mousePosition.Item1, mousePosition.Item2);
 
             StateLabel.Content = "Grab";
         }
 
+        /// <summary>
+        /// По отпусканию ЛКМ освободить элемент от курсора
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
 
-            Transformer.Drop();
+            ElementTransformService.Drop();
 
             StateLabel.Content = "Drop";
 
             Cursor = Cursors.Arrow;
+        }
+
+        /// <summary>
+        /// Кнопка добавления изображения (логотипа и пр.)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddLogoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var imageTransform = ComponentService.GetInteractionPictureWithOpenFileDialog().InputElement;
+
+            imageTransform.MouseLeftButtonDown += Border_MouseLeftButtonDown;
+            imageTransform.MouseLeave += Border_MouseLeave;
+            imageTransform.MouseEnter += Border_MouseEnter;
+
+            Canvas.SetLeft((UIElement)imageTransform, 0);
+            Canvas.SetTop((UIElement)imageTransform, 20);
+            CanvasSpace.Children.Add((UIElement)imageTransform);
+        }
+
+        /// <summary>
+        /// Кнопка добавления фонового изображения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetBackgroundButton_Click(object sender, RoutedEventArgs e)
+        {
+            var background = ComponentService.GetBackgroundWithOpenFileDialog();
+
+            CanvasSpace.Background = background;
+            AddLogoButton.IsEnabled = true;
+            AddTextButton.IsEnabled = true;
+
         }
 
         private void CanvasSpace_OnMouseMove(object sender, MouseEventArgs e)
@@ -90,7 +150,7 @@ namespace Templator
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var mousePosition = GetMousePosition((IInputElement) sender);
-                Transformer.DragOrStretch(mousePosition.Item1, mousePosition.Item2);
+                ElementTransformService.DragOrStretch(mousePosition.Item1, mousePosition.Item2);
                 StateLabel.Content = "DragOrStretch";
             }
             
@@ -98,7 +158,7 @@ namespace Templator
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Transformer.SetNewElement(sender);
+            ElementTransformService.SetNewElement(sender);
             StateLabel.Content = "SetNewELement";
         }
         private void Border_MouseLeave(object sender, MouseEventArgs e)
@@ -109,30 +169,29 @@ namespace Templator
             var mousePosition = GetMousePosition((IInputElement)sender);
 
             var stretchDirection =
-                Transformer.GetStretchDirection(mousePosition.Item1, mousePosition.Item2, sender);
+                ElementTransformService.GetStretchDirection(mousePosition.Item1, mousePosition.Item2, sender);
 
             switch (stretchDirection)
             {
                 //Установить корректный курсор
-                case Transformer.StretchDirections.Both:
+                case StretchDirections.Both:
                     Cursor = Cursors.SizeNWSE;
                     return;
-                case Transformer.StretchDirections.Right:
+                case StretchDirections.Right:
                     Cursor = Cursors.SizeWE;
                     return;
-                case Transformer.StretchDirections.Bottom:
+                case StretchDirections.Bottom:
                     Cursor = Cursors.SizeNS;
                     return;
-                case Transformer.StretchDirections.None:
+                case StretchDirections.None:
                     Cursor = Cursors.Arrow;
-                    break;
-                default:
                     break;
             }
             Cursor = Cursors.Arrow;
-            Transformer.ResetStates();
+            ElementTransformService.ResetStates();
             StateLabel.Content = "ResetStates";
         }
+
         private void Border_MouseEnter(object sender, MouseEventArgs e)
         {
             Border border = (Border)sender;
@@ -151,39 +210,6 @@ namespace Templator
                 
         }
 
-        public void TryAddToCollection(string elementName, string sampleText)
-        {
-            if (string.IsNullOrWhiteSpace(elementName))
-            {
-                MessageBox.Show("Введите корректное название текста!",
-                    "Невозможно создать элемент",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (TextElements.Any(t => t.Name == elementName))
-            {
-                MessageBox.Show("Элемент с таким названием уже существует!", "Невозможно создать элемент",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-
-                return;
-            }
-
-            var textElement = ComponentService.GetInteractionTextBlock(sampleText);
-
-            textElement.MouseLeftButtonDown += Border_MouseLeftButtonDown;
-            textElement.MouseLeave += Border_MouseLeave;
-            textElement.MouseEnter += Border_MouseEnter;
-
-            Canvas.SetLeft(textElement, 0);
-            Canvas.SetTop(textElement, 20);
-            CanvasSpace.Children.Add(textElement);
-
-            TextElements.Add(new TextElement{Name = elementName, TextControl = textElement});
-
-            MessageBox.Show(TextElements.Last().ToString() + " " + TextElements.Count);
-        }
-
         private (double, double) GetMousePosition(IInputElement element)
         {
             return (Mouse.GetPosition(element).X, Mouse.GetPosition(element).Y);
@@ -196,18 +222,59 @@ namespace Templator
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            if (TextElements.Count == 0)
+            {
+                OpenGenerateSettingsButton.IsEnabled = false;
+            }
+            else
+            {
+                OpenGenerateSettingsButton.IsEnabled = true;
+            }
+
             var callButton = (Button)sender;
 
-            if (callButton.DataContext is TextElement element)
+            if (callButton.DataContext is TextElementTransform element)
             {
-                CanvasSpace.Children.Remove(element.TextControl);
+                CanvasSpace.Children.Remove((UIElement)element.InputElement);
                 TextElements.Remove(element);
             }
         }
 
         private void OpenGenerateSettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            new ElementConfigWindow(this, TextElements).ShowDialog();
+        }
+
+        private void RestoreBorders()
+        {
+            foreach (var border in _borderElements)
+            {
+                border.BorderThickness = new Thickness(1);
+            }
+        }
+
+        private void RemoveBorders()
+        {
+            foreach (var border in _borderElements)
+            {
+                border.BorderThickness = new Thickness(0);
+            }
+        }
+
+        private void FillBordersList()
+        {
+            foreach (IInputElement element in CanvasSpace.Children)
+            {
+                if (element is Border border)
+                {
+                    _borderElements.Add(border);
+                }
+            }
+        }
+
+        private void GenerateButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Generate();
         }
     }
 }

@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="obj - Копировать\**" />
+    <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj - Копировать\**" />
+    <EmbeddedResource Remove="obj\**" />
     <None Remove="obj - Копировать\**" />
+    <None Remove="obj\**" />
     <Page Remove="obj - Копировать\**" />
+    <Page Remove="obj\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <PackageReference Include="Syncfusion.XlsIO.Wpf" Version="19.2.0.51" />
   </ItemGroup>
 
 </Project>

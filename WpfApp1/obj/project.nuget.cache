@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "YX+wDUhw/BV7PA/gTHTkZhlFrCEXZQnjj9i+3KovDB0a8ESGVJyOCRI4sQF6d8hRfwKImm4m19wRBxL5z7mK6g==",
+  "dgSpecHash": "RTsvqGWeukSZ2DJZUd8waJNzELjqwTyOivNaNH6UjQqJ/RPEUZx3THn9/4Noh57jITXPVXfo06pc44pZ0L5/iA==",
   "success": true,
   "projectFilePath": "D:\\Projects\\Templator\\WpfApp1\\Templator.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Demetros\\.nuget\\packages\\syncfusion.compression.base\\19.2.0.51\\syncfusion.compression.base.19.2.0.51.nupkg.sha512",
+    "C:\\Users\\Demetros\\.nuget\\packages\\syncfusion.licensing\\19.2.0.51\\syncfusion.licensing.19.2.0.51.nupkg.sha512",
+    "C:\\Users\\Demetros\\.nuget\\packages\\syncfusion.xlsio.wpf\\19.2.0.51\\syncfusion.xlsio.wpf.19.2.0.51.nupkg.sha512"
+  ],
   "logs": []
 }

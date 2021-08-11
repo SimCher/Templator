@@ -1,13 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="ElementConfigWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="FontChooseWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PreviewImageWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="TextDialog.xaml.cs">
@@ -15,10 +23,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="ElementConfigWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="FontChooseWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PreviewImageWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="TextDialog.xaml">

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using Templator.TransformElements;
 
 namespace Templator
 {
@@ -12,9 +13,9 @@ namespace Templator
     /// </summary>
     static class ComponentService
     {
-        public static Border GetInteractionTextBlock()
+        public static TextElementTransform GetInteractionTextBlock(string name)
         {
-            var textBox = new TextBlock
+            var textBlock = new TextBlock
             {
                 Text = "Loren Ipsum", 
                 TextAlignment = TextAlignment.Center,
@@ -22,38 +23,41 @@ namespace Templator
 
             };
             var border = GetBorderElement();
-            border.Child = textBox;
+            border.Child = textBlock;
 
-            return border;
+            var textTransform = new TextElementTransform(name, border);
+
+            return textTransform;
         }
 
-        public static Border GetInteractionTextBlock(string initialText)
+        public static TextElementTransform GetInteractionTextBlock(string name, string initialText)
         {
             if (!string.IsNullOrWhiteSpace(initialText))
             {
-                var textBox = new TextBlock
+                var textBlock = new TextBlock
                 {
                     Text = initialText,
-                    TextAlignment = TextAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
                     Background = new SolidColorBrush(Colors.Transparent),
-
                 };
                 var border = GetBorderElement();
-                border.Child = textBox;
+                border.Child = textBlock;
 
-                return border;
+                var textTransform = new TextElementTransform(name, border);
+
+                return textTransform;
             }
 
-            return GetInteractionTextBlock();
+            return GetInteractionTextBlock(name);
         }
         /// <summary>
         /// Открывает диалоговое окно для выбора изображения и возвращает изображение, выбранное пользователем
         /// </summary>
         /// <returns>Изображение, выбранное в диалоговом окне</returns>
-        public static Border GetInteractionPictureWithOpenFileDialog()
+        public static ImageElementTransform GetInteractionPictureWithOpenFileDialog()
         {
             Image image = null;
-            var dialog = ShowOpenFileDialog();
+            var dialog = ShowImageOpenFileDialog();
 
             if ((bool)dialog.ShowDialog())
             {
@@ -64,10 +68,12 @@ namespace Templator
             var border = GetBorderElement();
             border.Child = image;
 
+            var imageTransform = new ImageElementTransform(border);
+
             //border.Width = image.Width;
             //border.Height = image.Height;
 
-            return border;
+            return imageTransform;
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace Templator
         /// <returns>Изображение как объект типа ImageBrush</returns>
         public static ImageBrush GetBackgroundWithOpenFileDialog()
         {
-            var dialog = ShowOpenFileDialog();
+            var dialog = ShowImageOpenFileDialog();
             ImageBrush imageBrush = null;
 
             if ((bool) dialog.ShowDialog())
@@ -86,6 +92,20 @@ namespace Templator
             }
 
             return imageBrush;
+        }
+
+        public static string GetExcelFilename()
+        {
+            var dialog = ShowExcelOpenFIleDialog();
+
+            return (bool)dialog.ShowDialog() ? dialog.FileName : string.Empty;
+        }
+
+        public static string GetSavePath()
+        {
+            var dialog = ShowSaveFileDialog();
+
+            return (dialog.ShowDialog() == true) ? dialog.FileName : string.Empty;
         }
 
         /// <summary>
@@ -119,15 +139,32 @@ namespace Templator
             return border;
         }
 
+        private static Microsoft.Win32.SaveFileDialog ShowSaveFileDialog()
+        {
+            return new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "Изображение (.png)|*.png"
+            };
+        }
+
         /// <summary>
         /// Вызывает OpenFileDialog и возвращает данные выбранного файла
         /// </summary>
         /// <returns></returns>
-        private static Microsoft.Win32.OpenFileDialog ShowOpenFileDialog()
+        private static Microsoft.Win32.OpenFileDialog ShowImageOpenFileDialog()
         {
             return new()
             {
                 Filter = "Графические файлы (*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png"
+            };
+        }
+
+        private static Microsoft.Win32.OpenFileDialog ShowExcelOpenFIleDialog()
+        {
+            return new()
+            {
+                Filter = "Excel (*.xlsx)|*.xlsx"
             };
         }
 
