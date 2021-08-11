@@ -1,14 +1,17 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
 
 namespace Templator.TransformElements
 {
+    /// <summary>
+    /// Представляет трансформируемый графический UI-элемент
+    /// </summary>
     class ImageElementTransform : ElementTransform
     {
         private string _name;
 
+        /// <summary>
+        /// Название элемента
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -20,12 +23,7 @@ namespace Templator.TransformElements
                 }
             }
         }
-
-        public ImageElementTransform()
-        {
-
-        }
-
+        
         public ImageElementTransform(IInputElement imageElement)
         {
             InputElement = imageElement;
@@ -35,18 +33,6 @@ namespace Templator.TransformElements
         {
             Name = name;
             InputElement = imageElement;
-        }
-
-        /// <summary>
-        /// Вызывает OpenFileDialog и возвращает данные выбранного файла
-        /// </summary>
-        /// <returns></returns>
-        private static Microsoft.Win32.OpenFileDialog ShowOpenFileDialog()
-        {
-            return new()
-            {
-                Filter = "Графические файлы (*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png"
-            };
         }
     }
 }

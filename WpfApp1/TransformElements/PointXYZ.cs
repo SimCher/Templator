@@ -15,12 +15,14 @@
 
         public double X { get => _x; set => _x = value; }
         public double Y { get => _y; set => _y = value; }
+        /// <summary>
+        /// Z-индекс, не является координатой
+        /// </summary>
         public int ZIndex
         {
             get => _zIndex;
             set => _zIndex = value;
         }
-
 
         public PointXYZ(double x, double y, int zIndex)
         {
