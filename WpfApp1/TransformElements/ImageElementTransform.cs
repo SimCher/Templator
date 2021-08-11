@@ -23,10 +23,11 @@ namespace Templator.TransformElements
                 }
             }
         }
-        
+
         public ImageElementTransform(IInputElement imageElement)
         {
             InputElement = imageElement;
+
         }
 
         public ImageElementTransform(string name, IInputElement imageElement)

@@ -35,13 +35,9 @@ namespace Templator.TemplateGenerator
 
         public TemplateGenerator()
         {
-            if (_settings == null)
-            {
-                _settings = new ObservableCollection<TemplateElement>();
-            }
+            _settings = new ObservableCollection<TemplateElement>();
 
-            _excelPath = ComponentService.GetExcelFilename();
-
+            _excelPath = ComponentService.GetExcelFilename("Выберите Excel-документ формата *.xlsx");
         }
 
         public TemplateGenerator(TemplateGenerator generator) :this()
@@ -75,7 +71,7 @@ namespace Templator.TemplateGenerator
                 return worksheet.Range[excelCell].Text;
             }
 
-            var savePath = ComponentService.GetSavePath();
+            var savePath = ComponentService.GetSavePath("Выберите директорию в которую будут сохранены изображения");
 
             using var engine = new ExcelEngine();
             IApplication app = engine.Excel;
@@ -111,18 +107,6 @@ namespace Templator.TemplateGenerator
             }
 
             engine.Dispose();
-            OpenDirectory(savePath.Remove(savePath.Length - 4, 4));
-        }
-
-        /// <summary>
-        /// Открывает директорию, в которую сохранялись выходные файлы рендеринга
-        /// </summary>
-        /// <param name="path"></param>
-        private static void OpenDirectory(string path)
-        {
-            string directoryPath = Path.GetDirectoryName(path) ?? string.Empty;
-            //if(!string.IsNullOrEmpty(directoryPath))
-               // System.Diagnostics.Process.Start(directoryPath);
         }
     }
 }

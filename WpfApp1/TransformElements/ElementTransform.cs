@@ -25,13 +25,16 @@ namespace Templator.TransformElements
             get => _inputElement;
             set
             {
-                _inputElement = value;
-                _isDragging = false;
-                _isStretching = false;
-
-                if (_inputElement is Border border)
+                if (value != null)
                 {
-                    InputElementChildType = border.Child.GetType();
+                    _inputElement = value;
+                    _isDragging = false;
+                    _isStretching = false;
+
+                    if (_inputElement is Border border)
+                    {
+                        InputElementChildType = border.Child.GetType();
+                    }
                 }
             }
         }

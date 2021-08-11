@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,10 +13,6 @@ namespace Templator
     /// </summary>
     public partial class MainWindow
     {
-        private TemplateGenerator.TemplateGenerator Generator { get; set; }
-        private Canvas _mainWindowCanvas;
-        private IList<Border> _borderElements;
-
         /// <summary>
         /// Коллекция трансформируемых текстовых элементов (нужны для автозаполнения)
         /// </summary>
@@ -30,26 +24,7 @@ namespace Templator
             TextElements = new ObservableCollection<TextElementTransform>();
             DataContext = TextElements;
         }
-
-        public void Generate()
-        {
-            var thread = new Thread(new ParameterizedThreadStart(Generator.Generate));
-            _borderElements = new List<Border>();
-            if (_borderElements.Count == 0)
-            {
-                FillBordersList();
-            }
-            RemoveBorders();
-            Generator.Generate(CanvasSpace);
-            RestoreBorders();
-            MessageBox.Show("Готово!", "Генерация завершена", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        public void SetGenerator(TemplateGenerator.TemplateGenerator generator)
-        {
-            Generator = new TemplateGenerator.TemplateGenerator(generator);
-        }
-
+        
         /// <summary>
         /// Если возможно, добавить текстовый элемент в коллекцию трансформируемых текст. элементов
         /// </summary>
@@ -119,15 +94,22 @@ namespace Templator
         /// <param name="e"></param>
         private void AddLogoButton_Click(object sender, RoutedEventArgs e)
         {
-            var imageTransform = ComponentService.GetInteractionPictureWithOpenFileDialog().InputElement;
+            try
+            {
+                var imageTransform = ComponentService.GetInteractionPictureWithOpenFileDialog("Загрузка изображения")
+                    .InputElement;
+                imageTransform.MouseLeftButtonDown += Border_MouseLeftButtonDown;
+                imageTransform.MouseLeave += Border_MouseLeave;
+                imageTransform.MouseEnter += Border_MouseEnter;
 
-            imageTransform.MouseLeftButtonDown += Border_MouseLeftButtonDown;
-            imageTransform.MouseLeave += Border_MouseLeave;
-            imageTransform.MouseEnter += Border_MouseEnter;
-
-            Canvas.SetLeft((UIElement)imageTransform, 0);
-            Canvas.SetTop((UIElement)imageTransform, 20);
-            CanvasSpace.Children.Add((UIElement)imageTransform);
+                Canvas.SetLeft((UIElement)imageTransform, 0);
+                Canvas.SetTop((UIElement)imageTransform, 20);
+                CanvasSpace.Children.Add((UIElement)imageTransform);
+            }
+            catch (NullReferenceException)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -137,11 +119,17 @@ namespace Templator
         /// <param name="e"></param>
         private void SetBackgroundButton_Click(object sender, RoutedEventArgs e)
         {
-            var background = ComponentService.GetBackgroundWithOpenFileDialog();
-
-            CanvasSpace.Background = background;
-            AddLogoButton.IsEnabled = true;
-            AddTextButton.IsEnabled = true;
+            try
+            {
+                var background = ComponentService.GetBackgroundWithOpenFileDialog("Загрузка фонового изображения");
+                CanvasSpace.Background = background;
+                AddLogoButton.IsEnabled = true;
+                AddTextButton.IsEnabled = true;
+            }
+            catch (NullReferenceException)
+            {
+                return;
+            }
 
         }
 
@@ -242,39 +230,7 @@ namespace Templator
 
         private void OpenGenerateSettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            new ElementConfigWindow(this, TextElements).ShowDialog();
-        }
-
-        private void RestoreBorders()
-        {
-            foreach (var border in _borderElements)
-            {
-                border.BorderThickness = new Thickness(1);
-            }
-        }
-
-        private void RemoveBorders()
-        {
-            foreach (var border in _borderElements)
-            {
-                border.BorderThickness = new Thickness(0);
-            }
-        }
-
-        private void FillBordersList()
-        {
-            foreach (IInputElement element in CanvasSpace.Children)
-            {
-                if (element is Border border)
-                {
-                    _borderElements.Add(border);
-                }
-            }
-        }
-
-        private void GenerateButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            Generate();
+            new ElementConfigWindow(CanvasSpace, TextElements).ShowDialog();
         }
     }
 }

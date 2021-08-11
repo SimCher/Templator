@@ -46,8 +46,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Button Grid.Row="4" Name="OpenGenerateSettingsButton" Content="Настроить текст" Margin="0,0,0,5" Click="OpenGenerateSettingsButton_OnClick" IsEnabled="False"/>
-            <Button Grid.Row="5" Name="GenerateButton" Content="Сгенерировать" Margin="0,0,0,5" Click="GenerateButton_OnClick"></Button>
+            <Button Grid.Row="4" Name="OpenGenerateSettingsButton" Content="Загрузить текст" Margin="0,0,0,5" Click="OpenGenerateSettingsButton_OnClick" IsEnabled="False"/>
+            
             <Label Name="StateLabel" Grid.Row="7" Margin="0,0, 0, 5">
                 <Label.RenderTransform>
                     <ScaleTransform

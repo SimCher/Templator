@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Syncfusion.CompoundFile.XlsIO.Net;
-using Templator.TemplateGenerator;
 using Templator.TransformElements;
-using Directory = System.IO.Directory;
 
 namespace Templator
 {
@@ -24,40 +11,61 @@ namespace Templator
     public partial class ElementConfigWindow : Window
     {
         private TemplateGenerator.TemplateGenerator Generator { get; }
-        private MainWindow _window;
+        private Canvas _canvas;
         private IList<Border> _borderElements;
 
-        public ElementConfigWindow(MainWindow mainWindow, IEnumerable<TextElementTransform> uiTextTransforms)
+        public ElementConfigWindow(Canvas mainWindowCanvas, IEnumerable<TextElementTransform> uiTextTransforms)
         {
             InitializeComponent();
-            _window = mainWindow;
+            _canvas = mainWindowCanvas;
             Generator = new TemplateGenerator.TemplateGenerator(uiTextTransforms);
             DataContext = Generator.TemplateSettings;
             _borderElements = new List<Border>();
+            FillBordersList();
 
             AddHandler(System.Windows.Controls.Validation.ErrorEvent, new RoutedEventHandler(OnValidationRaised));
         }
 
+        private void Generate()
+        {
+            RemoveBorders();
+            Generator.Generate(_canvas);
+            RestoreBorders();
+
+            MessageBox.Show("Готово!", "Генерация завершена", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+        }
+
         private void GenerateButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _window.SetGenerator(Generator);
+            Generate();
             Close();
         }
-
-        private void ExcelColumnTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        
+        private void RestoreBorders()
         {
+            foreach (var border in _borderElements)
+            {
+                border.BorderThickness = new Thickness(1);
+            }
         }
 
-        private void SetTemplateSettings()
+        private void RemoveBorders()
         {
-            string message = "";
-
-            for (int i = 0; i < Generator.TemplateSettings.Count; i++)
+            foreach (var border in _borderElements)
             {
-                message += $"{i}. {Generator.TemplateSettings[i]} ";
+                border.BorderThickness = new Thickness(0);
             }
+        }
 
-            MessageBox.Show(message);
+        private void FillBordersList()
+        {
+            foreach (IInputElement element in _canvas.Children)
+            {
+                if (element is Border border)
+                {
+                    _borderElements.Add(border);
+                }
+            }
         }
 
         private void OnValidationRaised(object sender, RoutedEventArgs e)

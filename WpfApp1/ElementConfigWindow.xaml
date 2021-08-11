@@ -39,7 +39,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock x:Name="elementTextBlock" Grid.Column="0" FontSize="10" Margin="50, 3" Height="Auto" VerticalAlignment="Center" Text="{Binding Element.Name}"></TextBlock>
-                        <TextBox Name="excelColumnTextBox" TextAlignment="Center" MinWidth="117" Margin="50, 3" Grid.Column="1" FontSize="10" MaxLength="10" TextChanged="ExcelColumnTextBox_OnTextChanged">
+                        <TextBox Name="excelColumnTextBox" TextAlignment="Center" MinWidth="117" Margin="50, 3" Grid.Column="1" FontSize="10" MaxLength="10">
                             <TextBox.Text>
                                 <Binding Path="TextSource" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
