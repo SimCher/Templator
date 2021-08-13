@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -18,11 +17,13 @@ namespace Templator.ImageProcessing
         /// <returns></returns>
         private static Size ModifyPosition(FrameworkElement element)
         {
+            //Size size = ComponentService.BackgroundInitialSize;
             Size size = new Size(element.ActualWidth + element.Margin.Left + element.Margin.Right,
                 element.ActualHeight + element.Margin.Top + element.Margin.Bottom);
             element.Measure(size);
             element.Arrange(new Rect(-element.Margin.Left, -element.Margin.Top,
                 size.Width, size.Height));
+            //element.Arrange(new Rect(size));
 
             return size;
         }

@@ -39,6 +39,11 @@ namespace Templator.TransformElements
             }
         }
 
+        internal UIElement UIElement
+        {
+            get => (_inputElement as Border)?.Child;
+        }
+
         /// <summary>
         /// Объект типа Type, который содержит название потомка текущего экземпляра
         /// </summary>

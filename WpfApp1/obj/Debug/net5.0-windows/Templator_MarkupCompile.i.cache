@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 D:\Projects\Templator\WpfApp1\App.xaml
-51046403578
+7-1568890762
 
-251700666516
+30672706501
 196-732216621
-ElementConfigWindow.xaml;FontChooseWindow.xaml;MainWindow.xaml;PreviewImageWindow.xaml;TextDialog.xaml;
+ColorFontDialog.xaml;ColorPicker.xaml;ElementConfigWindow.xaml;FontChooseWindow.xaml;MainWindow.xaml;PreviewImageWindow.xaml;TextDialog.xaml;
 
 True
 

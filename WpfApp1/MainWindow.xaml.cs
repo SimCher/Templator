@@ -16,7 +16,7 @@ namespace Templator
         /// <summary>
         /// Коллекция трансформируемых текстовых элементов (нужны для автозаполнения)
         /// </summary>
-        ObservableCollection<TextElementTransform> TextElements { get; }
+        private ObservableCollection<TextElementTransform> TextElements { get; }
 
         public MainWindow()
         {
@@ -24,7 +24,7 @@ namespace Templator
             TextElements = new ObservableCollection<TextElementTransform>();
             DataContext = TextElements;
         }
-        
+
         /// <summary>
         /// Если возможно, добавить текстовый элемент в коллекцию трансформируемых текст. элементов
         /// </summary>
@@ -53,8 +53,6 @@ namespace Templator
             TextElements.Add(new TextElementTransform(elementName, textElement.InputElement));
 
             OpenGenerateSettingsButton.IsEnabled = true;
-
-            MessageBox.Show(TextElements.Last() + " " + TextElements.Count);
         }
 
         /// <summary>
@@ -130,18 +128,16 @@ namespace Templator
             {
                 return;
             }
-
         }
 
         private void CanvasSpace_OnMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var mousePosition = GetMousePosition((IInputElement) sender);
+                var mousePosition = GetMousePosition((IInputElement)sender);
                 ElementTransformService.DragOrStretch(mousePosition.Item1, mousePosition.Item2);
                 StateLabel.Content = "DragOrStretch";
             }
-            
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -149,6 +145,7 @@ namespace Templator
             ElementTransformService.SetNewElement(sender);
             StateLabel.Content = "SetNewELement";
         }
+
         private void Border_MouseLeave(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -175,6 +172,7 @@ namespace Templator
                     Cursor = Cursors.Arrow;
                     break;
             }
+
             Cursor = Cursors.Arrow;
             ElementTransformService.ResetStates();
             StateLabel.Content = "ResetStates";
@@ -195,7 +193,6 @@ namespace Templator
                 Cursor = Cursors.Arrow;
                 StateLabel.Content = "Reset";
             }
-                
         }
 
         private (double, double) GetMousePosition(IInputElement element)
@@ -208,16 +205,14 @@ namespace Templator
             new TextDialog(this).ShowDialog();
         }
 
+        /// <summary>
+        /// Обработчик нажатия кнопок внутри ListBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            if (TextElements.Count == 0)
-            {
-                OpenGenerateSettingsButton.IsEnabled = false;
-            }
-            else
-            {
-                OpenGenerateSettingsButton.IsEnabled = true;
-            }
+            OpenGenerateSettingsButton.IsEnabled = TextElements.Count != 0;
 
             var callButton = (Button)sender;
 
@@ -226,6 +221,17 @@ namespace Templator
                 CanvasSpace.Children.Remove((UIElement)element.InputElement);
                 TextElements.Remove(element);
             }
+        }
+
+        private void ChangeFont_OnClick(object sender, RoutedEventArgs e)
+        {
+            var callButton = (Button)sender;
+
+            if (callButton.DataContext is TextElementTransform element)
+            {
+                new ColorFontDialog(element).ShowDialog();
+            }
+            
         }
 
         private void OpenGenerateSettingsButton_OnClick(object sender, RoutedEventArgs e)

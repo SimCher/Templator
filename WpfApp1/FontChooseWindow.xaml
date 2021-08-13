@@ -5,29 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:com="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:local="clr-namespace:Templator" x:Class="Templator.FontChooseWindow"
-        mc:Ignorable="d"
-        Height="380" Width="512">
+        mc:Ignorable="d" d:DesignWidth="582" Height="332">
+
     <Grid>
-       <Grid.Resources>
-           <DataTemplate x:Key="FontFamilyData">
-               <TextBlock Text="{Binding Source}"/>
-           </DataTemplate>
-           <DataTemplate DataType="{x:Type FamilyTypeface}">
-               <WrapPanel>
-                   <TextBlock Text="{Binding Style}"/>
-                   <TextBlock Text="-"/>
-                   <TextBlock Text="{Binding Weight}"/>
-                   <TextBlock Text="-"/>
-                   <TextBlock Text="{Binding Stretch}"/>
-               </WrapPanel>
-           </DataTemplate>
-           <CollectionViewSource Source="{Binding Source={x:Static Fonts.SystemFontFamilies}}" x:Key="FamilyCollection">
-               <CollectionViewSource.SortDescriptions>
-                   <com:SortDescription PropertyName="Source" Direction="Ascending"/>
-               </CollectionViewSource.SortDescriptions>
-           </CollectionViewSource>
-       </Grid.Resources>
-        <Grid DataContext="{StaticResource FamilyCollection}" Margin="0, 0, 0, 20">
+        <Grid.Resources>
+            <DataTemplate x:Key="FontFamilyData">
+                <TextBlock Text="{Binding Source}"></TextBlock>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type FamilyTypeface}">
+                <WrapPanel>
+                    <TextBlock Text="{Binding Style}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding Weight}"/>
+                    <TextBlock Text=""/>
+                    <TextBlock Text="{Binding Stretch}"/>
+                </WrapPanel>
+            </DataTemplate>
+            <CollectionViewSource Source="{Binding Source={x:Static Fonts.SystemFontFamilies}}" x:Key="FamilyCollection">
+                <CollectionViewSource.SortDescriptions>
+                    <com:SortDescription PropertyName="Source" Direction="Ascending"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+        </Grid.Resources>
+        <Grid DataContext="{StaticResource FamilyCollection}" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
@@ -39,47 +39,44 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Padding="5" Margin="1, 7, 199, 209" Foreground="Black" FontStyle="Oblique" Grid.RowSpan="2" Grid.ColumnSpan="2"><Run Text="Шрифт"/></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" Padding="5" Margin="1,7,199,209" Foreground="Black" FontStyle="Italic" Grid.RowSpan="2" Grid.ColumnSpan="2"><Run Text="Font Family"/></TextBlock>
             <ListBox x:Name="FamilyListBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0"
-                     ItemsSource="{Binding}" ItemTemplate="{StaticResource FontFamilyData}"
-                     Margin="5">
+                     ItemsSource="{Binding}" ItemTemplate="{StaticResource FontFamilyData}" Margin="5">
                 <ListBox.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightBlue</SolidColorBrush>
                 </ListBox.Resources>
             </ListBox>
 
-            <TextBlock Grid.Row="0" Grid.Column="1" Padding="5" Foreground="Black" FontStyle="Oblique" Margin="1,7,201,209" Grid.RowSpan="2" Grid.ColumnSpan="1"><Run Text="Стиль, Размер, Растяжение"/></TextBlock>
-            <ListBox x:Name="typefaceListBox" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding FamilyTypefaces}" Margin="5">
+            <TextBlock Grid.Row="0" Grid.Column="1" Padding="5" Foreground="Black" FontStyle="Italic" Margin="1,7,201,209" Grid.RowSpan="2" Grid.ColumnSpan="2"><Run Text="Стиль шрифта"/></TextBlock>
+            <ListBox x:Name="TypefacesListBox" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding FamilyTypefaces}" Margin="5">
                 <ListBox.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}">LightBlue</SolidColorBrush>
                 </ListBox.Resources>
             </ListBox>
 
-            <TextBlock Grid.Row="0" Grid.Column="2" Padding="5" Foreground="Black" FontStyle="Oblique" Margin="1,7,-1,209" Grid.RowSpan="2"><Run Text="Образец текста"/></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" Padding="5" Foreground="Black" FontStyle="Italic" Margin="1,7,-1,209" Grid.RowSpan="2"><Run Text="Образец текста"/></TextBlock>
             <Grid Grid.Column="2" Grid.Row="1" Margin="5">
-                <TextBox Name="sampleTextBox" FontSize="{Binding Value, ElementName=sizeSlider}" AcceptsReturn="True"
-                         FontFamily="{Binding Source, Source={StaticResource familyCollection}}"
-                         FontWeight="{Binding SelectedItem.Weight, ElementName=typefaceListBox}"
-                         FontStretch="{Binding SelectedItem.Stretch, ElementName=typefaceListBox}"
-                         FontStyle="{Binding SelectedItem.Style, ElementName=typefaceListBox}"
+                <TextBox Name="SampleTextBox" FontSize="{Binding Value, ElementName=FontSizeSlider}" AcceptsReturn="True"
+                         FontFamily="{Binding Source, Source={StaticResource FamilyCollection}}"
+                         FontWeight="{Binding SelectedItem.Weight, ElementName=TypefacesListBox}"
+                         FontStretch="{Binding SelectedItem.Stretch, ElementName=TypefacesListBox}"
+                         FontStyle="{Binding SelectedItem.Style, ElementName=TypefacesListBox}"
                          TextAlignment="Center" TextWrapping="Wrap"
-                         Text="Lorem ipsum dolor sit amet, consectetur adipisicing elit" Background="#FFFFFFF7"/>
-                <Slider x:Name="sizeSlider"
-                        Maximum="18"
-                        Value="10" Minimum="8"
-                        SmallChange=".5" LargeChange="2" HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom" Width="192" Margin="0,0,0,5"
-                        TickPlacement="BottomRight"
-                        AutoToolTipPlacement="TopLeft"></Slider>
-                
+                         Text="Съешь ещё этих мягких французских булок да выпей же чаю" Background="#FFFFFFF7"/>
+                <Slider x:Name="FontSizeSlider" Maximum="48" Value="14" Minimum="6" SmallChange="1" LargeChange="2"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="192" Margin="0,0,0,5"
+                        TickPlacement="BottomRight" AutoToolTipPlacement="TopLeft"/>
             </Grid>
-            <Window Height="380" Width="592">
 
-            </Window>
+            <Grid Grid.Column="1" Grid.Row="2" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Margin="0,8,0,0" Text="Цвет шрифта:" FontStyle="Italic" Grid.RowSpan="2"/>
+                <local:ColorPicker Grid.Row="1" Height="32" x:Name="ColorPicker" ColorChanged="ColorPicker_ColorChanged" Margin="0,2"/>
+            </Grid>
         </Grid>
-        
     </Grid>
 
-
-    
 </UserControl>

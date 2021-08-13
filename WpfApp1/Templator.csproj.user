@@ -9,6 +9,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="ColorFontDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ColorPicker.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ElementConfigWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -23,6 +29,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="ColorFontDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ColorPicker.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="ElementConfigWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -20,26 +20,25 @@ namespace Templator
     /// </summary>
     public partial class FontChooseWindow : UserControl
     {
-        private FontService _font;
-
-        public FontService SelectedFont =>
-            new(sampleTextBox.FontFamily,
-                sampleTextBox.FontStyle,
-                sampleTextBox.FontStretch,
-                sampleTextBox.FontSize,
-                sampleTextBox.FontWeight);
-
         public FontChooseWindow()
         {
             InitializeComponent();
-            sampleTextBox.IsReadOnly = true;
+            SampleTextBox.IsReadOnly = true;
         }
 
-
-
-        private void OkButton_OnClick(object sender, RoutedEventArgs e)
+        public FontSetting SelectedFont
         {
-            throw new NotImplementedException();
+            get => new(SampleTextBox.FontFamily,
+                SampleTextBox.FontStyle,
+                SampleTextBox.FontStretch,
+                SampleTextBox.FontSize,
+                SampleTextBox.FontWeight,
+                ColorPicker.SelectedFontColor.Brush);
+        }
+
+        private void ColorPicker_ColorChanged(object sender, RoutedEventArgs e)
+        {
+            SampleTextBox.Foreground = ColorPicker.SelectedFontColor.Brush;
         }
     }
 }

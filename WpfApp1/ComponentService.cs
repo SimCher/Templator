@@ -13,6 +13,7 @@ namespace Templator
     /// </summary>
     static class ComponentService
     {
+        public static Size BackgroundInitialSize { get; private set; }
         /// <summary>
         /// Возвращает новый экземпляр трансформируемого текстового UI-элемента
         /// с указанным именем
@@ -106,6 +107,7 @@ namespace Templator
             if ((bool) dialog.ShowDialog())
             {
                 var bitmap = new BitmapImage(new Uri(dialog.FileName));
+                BackgroundInitialSize = new Size(bitmap.Width, bitmap.Height);
                 imageBrush = new ImageBrush {ImageSource = bitmap};
 
                 if (bitmap == null)
