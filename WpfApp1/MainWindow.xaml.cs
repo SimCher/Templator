@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Templator.TransformElements;
+using Image = Templator.Models.Image;
 
 namespace Templator
 {
@@ -13,6 +14,7 @@ namespace Templator
     /// </summary>
     public partial class MainWindow
     {
+        private Image _canvasBackground;
         /// <summary>
         /// Коллекция трансформируемых текстовых элементов (нужны для автозаполнения)
         /// </summary>
@@ -119,7 +121,10 @@ namespace Templator
         {
             try
             {
+
                 var background = ComponentService.GetBackgroundWithOpenFileDialog("Загрузка фонового изображения");
+                _canvasBackground = new Image(background.ImageSource,
+                    ComponentService.BackgroundInitialSize);
                 CanvasSpace.Background = background;
                 AddLogoButton.IsEnabled = true;
                 AddTextButton.IsEnabled = true;

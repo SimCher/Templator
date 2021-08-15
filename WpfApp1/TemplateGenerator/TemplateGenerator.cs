@@ -101,7 +101,7 @@ namespace Templator.TemplateGenerator
                 }
 
                 builder.Insert(builder.ToString().Length - 4, columnNumber);
-                CanvasConverter.PngExport(canvas, builder.ToString());
+                CanvasConverter.ExportImage(canvas, builder.ToString());
                 columnNumber++;
                 builder.Clear();
             }
