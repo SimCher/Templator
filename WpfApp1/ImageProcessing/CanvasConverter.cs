@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -138,7 +139,7 @@ namespace Templator.ImageProcessing
 
             //Инициализация рендера
             var render = new RenderTargetBitmap((int)bound.Width, (int)bound.Height,
-                300, 300, PixelFormats.Pbgra32);
+                96, 96, PixelFormats.Pbgra32);
 
             //Рендер элемента
             render.Render(visual);
@@ -163,10 +164,15 @@ namespace Templator.ImageProcessing
         /// <param name="savePath"></param>
         private static void PngExport(RenderTargetBitmap render, string savePath)
         {
-            using FileStream stream = new(savePath, FileMode.Create);
-            var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(render));
-            encoder.Save(stream);
+            using (var file = new FileStream(savePath, FileMode.Create))
+            {
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(render));
+                encoder.Save(file);
+                render.Clear();
+            }
+
+
         }
     }
 }

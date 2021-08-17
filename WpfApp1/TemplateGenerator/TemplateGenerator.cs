@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
@@ -104,6 +105,10 @@ namespace Templator.TemplateGenerator
                 CanvasConverter.ExportImage(canvas, builder.ToString());
                 columnNumber++;
                 builder.Clear();
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
 
             engine.Dispose();
